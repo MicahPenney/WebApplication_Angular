@@ -151,6 +151,7 @@ namespace WebAPI.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, table);
         }
 
+        [Route("api/Employee/SaveFile")]
         public string SaveFile()
         {
             try
@@ -158,11 +159,15 @@ namespace WebAPI.Controllers
                 var httpRequest = HttpContext.Current.Request;
                 var postedFile = httpRequest.Files[0];
                 string filename = postedFile.FileName;
+                var physicalPath = HttpContext.Current.Server.MapPath("~/Photos/" + filename);
+
+                postedFile.SaveAs(physicalPath);
+
+                return filename;
             }
             catch (Exception)
             {
-
-                throw;
+                return "anonymous.png";
             }
         }
     }
